@@ -2171,3 +2171,23 @@ type BlockRetriever interface {
 	// TogglePrefetcher creates a new prefetcher.
 	TogglePrefetcher(enable bool, syncCh <-chan struct{}) <-chan struct{}
 }
+
+// Chat notes:
+// When sending:
+//   * chat1.FindConversationsLocal
+//   * If not exists, chat1.NewConversationLocal
+//   * chat1.PostLocal (...NonBlock?)
+
+// One layer over the service RPC connection that takes all needed
+// arguments (including topic type, etc), and passes it pretty
+// directly to the RPC.
+
+// Another, per-TLF layer to remember the resolved conversation ID and
+// send/read kbfs-edits messages.  It should also interface with the
+// local journal to show the unflushed journal data as part of the
+// updates.
+
+// Finally an inbox layer that can read the server inbox, and also
+// checks the journal status, to return the top set of conversations
+// at any given time.  Maybe it also subscribes to inbox notifications
+// of some kind.
